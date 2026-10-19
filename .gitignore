@@ -43,3 +43,8 @@ next-env.d.ts
 # Base de datos local (libSQL) y secretos
 /datos
 .env*.local
+
+# Skills de agentes de IA instaladas por integraciones (herramientas locales)
+/.agents
+/.claude
+skills-lock.json
