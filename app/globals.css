@@ -1,26 +1,293 @@
 @import "tailwindcss";
 
+/* Arena clara + paleta tecnológica de los 70 */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --arena-50: #fcf8ef;
+  --arena-100: #f5ecdc;
+  --arena-200: #ecdcc0;
+  --arena-300: #dfc79f;
+  --arena-400: #c9a676;
+  --arena-500: #a9834f;
+  --tinta: #33241a;
+  --tinta-suave: #6a5440;
+  --mostaza: #dca137;
+  --naranja: #d4702c;
+  --ladrillo: #a9442a;
+  --cafe: #5b3a24;
+  --fosforo: #ffb547;
+  --papel-banda: #e4ecd6;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-arena-50: var(--arena-50);
+  --color-arena-100: var(--arena-100);
+  --color-arena-200: var(--arena-200);
+  --color-arena-300: var(--arena-300);
+  --color-arena-400: var(--arena-400);
+  --color-arena-500: var(--arena-500);
+  --color-tinta: var(--tinta);
+  --color-tinta-suave: var(--tinta-suave);
+  --color-mostaza: var(--mostaza);
+  --color-naranja: var(--naranja);
+  --color-ladrillo: var(--ladrillo);
+  --color-cafe: var(--cafe);
+  --color-fosforo: var(--fosforo);
+  --color-papel-banda: var(--papel-banda);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+  --font-display: var(--font-fraunces);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--arena-100);
+  color: var(--tinta);
+}
+
+::selection {
+  background: var(--mostaza);
+  color: var(--tinta);
+}
+
+/* Fraunces en su eje "soft": el guiño a Cooper / Windsor */
+.font-display {
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+}
+
+/* Cuatro franjas setenteras */
+.franjas {
+  background: linear-gradient(
+    to bottom,
+    var(--mostaza) 0 25%,
+    var(--naranja) 25% 50%,
+    var(--ladrillo) 50% 75%,
+    var(--cafe) 75% 100%
+  );
+}
+
+.franjas-h {
+  background: linear-gradient(
+    to right,
+    var(--mostaza) 0 25%,
+    var(--naranja) 25% 50%,
+    var(--ladrillo) 50% 75%,
+    var(--cafe) 75% 100%
+  );
+}
+
+/* Tecla: botón con canto inferior; al pasar el cursor se ilumina como una
+   tecla retroiluminada (halo ámbar y un poco más de brillo) */
+.tecla {
+  box-shadow: 0 4px 0 var(--cafe);
+  transition: transform 80ms, box-shadow 180ms ease-out, filter 180ms ease-out;
+}
+.tecla:hover,
+.tecla:focus-visible {
+  filter: brightness(1.08) saturate(1.05);
+  box-shadow:
+    0 4px 0 var(--cafe),
+    0 0 0 3px rgb(255 181 71 / 0.35),
+    0 0 22px rgb(255 181 71 / 0.45);
+}
+.tecla:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: 3px;
+}
+.tecla:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 var(--cafe),
+    0 0 0 3px rgb(255 181 71 / 0.35),
+    0 0 14px rgb(255 181 71 / 0.4);
+}
+
+/* Papel continuo de impresora */
+.papel {
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--papel-banda) 0 3.5rem,
+    var(--arena-50) 3.5rem 7rem
+  );
+}
+.perforaciones {
+  background-image: radial-gradient(circle, var(--arena-100) 0.32rem, transparent 0.36rem);
+  background-size: 100% 1.5rem;
+  background-position: center 0.75rem;
+}
+
+/* Rejilla de puntos, como hoja de programación */
+.puntos {
+  background-image: radial-gradient(rgb(51 36 26 / 0.09) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Fondos ASCII en mosaico: SVG en public/fondos (npm run fondos) usados como
+   máscara, así el color sale de --tono-fondo y no se repite texto en el HTML. */
+/* En la capa components para que las utilidades de Tailwind (top-14, opacity-70…) puedan ajustarlo */
+@layer components {
+  .fondo-ascii {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-color: var(--tono-fondo, var(--arena-300));
+    -webkit-mask-image: var(--mosaico);
+    mask-image: var(--mosaico);
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+  }
+  .mosaico-circuito { --mosaico: url(/fondos/circuito.svg); --ancho: 518.4px; --alto: 504px; }
+  .mosaico-perforada { --mosaico: url(/fondos/perforada.svg); --ancho: 576px; --alto: 336px; }
+  .mosaico-rejilla { --mosaico: url(/fondos/rejilla.svg); --ancho: 460.8px; --alto: 448px; }
+  .mosaico-ondas { --mosaico: url(/fondos/ondas.svg); --ancho: 691.2px; --alto: 336px; }
+  .mosaico-hex { --mosaico: url(/fondos/hex.svg); --ancho: 432px; --alto: 336px; }
+  .mosaico-cielo { --mosaico: url(/fondos/cielo.svg); --ancho: 576px; --alto: 420px; }
+  .mosaico-karel { --mosaico: url(/fondos/karel.svg); --ancho: 432px; --alto: 420px; }
+  .mosaico-acertijos { --mosaico: url(/fondos/acertijos.svg); --ancho: 518.4px; --alto: 392px; }
+
+  /* Fondo animado (página principal). La capa crece un mosaico hacia el lado al
+     que avanza y se traslada exactamente un mosaico: el ciclo empata y todo va
+     por transform, sin volver a pintar la máscara.
+     El barrido es un degradado naranja dentro de la misma capa del mosaico: solo
+     se ve a través de la máscara, así ilumina justo los caracteres del fondo y
+     nunca se desalinea de ellos. */
+  .hacia-izquierda { --dx: calc(-1 * var(--ancho)); --dy: 0px; inset: 0 calc(-1 * var(--ancho)) 0 0; }
+  .hacia-derecha { --dx: var(--ancho); --dy: 0px; inset: 0 0 0 calc(-1 * var(--ancho)); }
+  .hacia-arriba { --dx: 0px; --dy: calc(-1 * var(--alto)); inset: 0 0 calc(-1 * var(--alto)) 0; }
+  .hacia-diagonal {
+    --dx: var(--ancho);
+    --dy: calc(-1 * var(--alto));
+    inset: 0 0 calc(-1 * var(--alto)) calc(-1 * var(--ancho));
+  }
+  .barrido {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 38%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent 0%, var(--naranja) 42%, var(--naranja) 58%, transparent 100%);
+    opacity: 0;
+    transform: translate3d(-110%, 0, 0);
+  }
+}
+
+/* Fondo general del sitio: circuito impreso fijo detrás de todo */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--arena-300);
+  opacity: 0.6;
+  -webkit-mask-image: url(/fondos/circuito.svg);
+  mask-image: url(/fondos/circuito.svg);
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+}
+
+/* Animaciones leves del arte ASCII. Cada capa toma una variante t0–t5 para
+   que no todo se mueva al mismo tiempo. Solo se anima opacity y transform
+   (lo resuelve la GPU), y solo si el usuario no pidió reducir el movimiento. */
+.t0 { --dur: 3.2s; --ret: -0.3s; }
+.t1 { --dur: 4.1s; --ret: -1.7s; }
+.t2 { --dur: 5.3s; --ret: -2.9s; }
+.t3 { --dur: 3.7s; --ret: -0.9s; }
+.t4 { --dur: 6.1s; --ret: -4.2s; }
+.t5 { --dur: 4.7s; --ret: -3.4s; }
+
+/* Capas que solo existen mientras se animan (copias encendidas, resplandores) */
+.tecla-pulsa,
+.sol-brillo,
+.brillo-fosforo {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .titilar {
+    animation: titilar var(--dur, 4s) ease-in-out var(--ret, 0s) infinite;
+  }
+  .parpadeo {
+    animation: parpadeo calc(var(--dur, 4s) * 1.6) steps(1) var(--ret, 0s) infinite;
+  }
+  .tecla-pulsa {
+    animation: tecla-pulsa calc(var(--dur, 4s) * 2.2) ease-out var(--ret, 0s) infinite;
+  }
+  .sol-respira {
+    animation: sol-respira 7s ease-in-out infinite;
+  }
+  .sol-brillo {
+    animation: sol-brillo 7s ease-in-out infinite;
+  }
+  .onda {
+    animation: onda 2.4s ease-in-out var(--ret, 0s) infinite;
+  }
+  .flotar {
+    animation: flotar 6s ease-in-out infinite;
+  }
+  .brillo-fosforo {
+    animation: brillo-fosforo 3.5s ease-in-out infinite;
+  }
+  .deriva {
+    animation: deriva var(--vel, 80s) linear infinite;
+  }
+  /* El primer barrido espera a que la página termine de cargar */
+  .barrido {
+    opacity: 0.75;
+    animation: barrer 12s ease-in-out var(--retraso-barrido, 1.5s) infinite both;
+  }
+}
+
+@keyframes deriva {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(var(--dx, 0px), var(--dy, 0px), 0); }
+}
+/* La franja cruza en la primera mitad del ciclo y descansa en la segunda.
+   Se mide en su propio ancho (38 % de la capa): de -110 % a 270 % la recorre entera. */
+@keyframes barrer {
+  0% { transform: translate3d(-110%, 0, 0); }
+  55%, 100% { transform: translate3d(270%, 0, 0); }
+}
+
+@keyframes titilar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+@keyframes parpadeo {
+  0%, 100% { opacity: 1; }
+  48% { opacity: 0; }
+  52% { opacity: 1; }
+}
+@keyframes tecla-pulsa {
+  0%, 88%, 100% { opacity: 0; }
+  91% { opacity: 1; }
+}
+@keyframes sol-respira {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+@keyframes sol-brillo {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+@keyframes onda {
+  0%, 100% { opacity: 0.15; }
+  35% { opacity: 1; }
+}
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes brillo-fosforo {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
